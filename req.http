@@ -17,6 +17,14 @@ GET http://{{host}}/{{name}}
 
 ###
 
+GET http://{{host}}/{{name}}?status=active
+
+###
+
+GET http://{{host}}/{{name}}?status=inactive
+
+###
+
 GET http://{{host}}/{{name}}
 content-type: application/xml
 
