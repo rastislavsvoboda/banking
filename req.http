@@ -22,7 +22,7 @@ content-type: application/xml
 
 ###
 
-GET http://{{host}}/{{name}}/0123
+GET http://{{host}}/{{name}}/2000
 
 ###
 
