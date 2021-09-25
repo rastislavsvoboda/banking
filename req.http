@@ -1,0 +1,26 @@
+@hostname = localhost
+@port = 8000
+@host = {{hostname}}:{{port}}
+@contentType = application/json
+
+###
+
+@name = greet
+
+GET http://{{host}}/{{name}}
+
+###
+
+@name = customers
+
+GET http://{{host}}/{{name}}
+
+
+###
+
+GET http://{{host}}/{{name}}
+content-type: application/xml
+
+
+
+
