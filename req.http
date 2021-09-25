@@ -15,12 +15,18 @@ GET http://{{host}}/{{name}}
 
 GET http://{{host}}/{{name}}
 
-
 ###
 
 GET http://{{host}}/{{name}}
 content-type: application/xml
 
+###
+
+GET http://{{host}}/{{name}}/0123
+
+###
+
+POST http://{{host}}/{{name}}
 
 
 
