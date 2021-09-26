@@ -5,7 +5,7 @@ import (
 	"net/http"
 
 	"github.com/gorilla/mux"
-	"github.com/rastislavsvoboda/banking/domain/dto"
+	"github.com/rastislavsvoboda/banking/dto"
 	"github.com/rastislavsvoboda/banking/service"
 )
 

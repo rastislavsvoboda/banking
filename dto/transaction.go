@@ -3,7 +3,7 @@ package dto
 import (
 	"strings"
 
-	"github.com/rastislavsvoboda/banking/domain/errs"
+	"github.com/rastislavsvoboda/banking/errs"
 )
 
 const WITHDRAWAL = "withdrawal"

@@ -6,7 +6,7 @@ import (
 
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/jmoiron/sqlx"
-	"github.com/rastislavsvoboda/banking/domain/errs"
+	"github.com/rastislavsvoboda/banking/errs"
 	"github.com/rastislavsvoboda/banking/logger"
 )
 
@@ -29,26 +29,9 @@ func (d AccountRepositoryDb) Save(a Account) (*Account, *errs.AppError) {
 		return nil, errs.NewUnexpectedError("Unexpected database error")
 	}
 	a.AccountId = strconv.FormatInt(id, 10)
-
 	return &a, nil
 }
 
-func (d AccountRepositoryDb) FindBy(id string) (*Account, *errs.AppError) {
-	var a Account
-
-	accountSql := "select account_id, customer_id, opening_date, account_type, amount, status from accounts where account_id = ?"
-	err := d.client.Get(&a, accountSql, id)
-	if err != nil {
-		if err == sql.ErrNoRows {
-			return nil, errs.NewNotFoundError("Account not found")
-		} else {
-			logger.Error("Error while scanning accounts " + err.Error())
-			return nil, errs.NewUnexpectedError("Unexpected database error")
-		}
-	}
-
-	return &a, nil
-}
 
 func (d AccountRepositoryDb) SaveTransaction(t Transaction) (*Transaction, *errs.AppError) {
 	// starting the database transaction block
@@ -56,7 +39,6 @@ func (d AccountRepositoryDb) SaveTransaction(t Transaction) (*Transaction, *errs
 	if err != nil {
 		logger.Error("Error while starting a new transaction for bank account transaction: " + err.Error())
 		return nil, errs.NewUnexpectedError("Unexpected database error")
-
 	}
 
 	insertTransactionSql := "INSERT INTO transactions (account_id, amount, transaction_type, transaction_date) VALUES (?, ?, ?, ?)"
@@ -96,6 +78,23 @@ func (d AccountRepositoryDb) SaveTransaction(t Transaction) (*Transaction, *errs
 	t.Amount = account.Amount
 
 	return &t, nil
+}
+
+func (d AccountRepositoryDb) FindBy(id string) (*Account, *errs.AppError) {
+	var a Account
+
+	accountSql := "select account_id, customer_id, opening_date, account_type, amount, status from accounts where account_id = ?"
+	err := d.client.Get(&a, accountSql, id)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return nil, errs.NewNotFoundError("Account not found")
+		} else {
+			logger.Error("Error while scanning accounts " + err.Error())
+			return nil, errs.NewUnexpectedError("Unexpected database error")
+		}
+	}
+
+	return &a, nil
 }
 
 func NewAccountRepositoryDb(dbClient *sqlx.DB) AccountRepositoryDb {

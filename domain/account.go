@@ -1,8 +1,8 @@
 package domain
 
 import (
-	"github.com/rastislavsvoboda/banking/domain/dto"
-	"github.com/rastislavsvoboda/banking/domain/errs"
+	"github.com/rastislavsvoboda/banking/dto"
+	"github.com/rastislavsvoboda/banking/errs"
 )
 
 type Account struct {
@@ -14,10 +14,16 @@ type Account struct {
 	Status      string  `db:"status"`
 }
 
+func (a Account) ToNewAccountResponseDto() *dto.NewAccountResponse {
+	return &dto.NewAccountResponse{
+		AccountId: a.AccountId,
+	}
+}
+
 type AccountRepository interface {
-	Save(Account) (*Account, *errs.AppError)
-	FindBy(string) (*Account, *errs.AppError)
-	SaveTransaction(Transaction) (*Transaction, *errs.AppError)
+	Save(account Account) (*Account, *errs.AppError)
+	SaveTransaction(transaction Transaction) (*Transaction, *errs.AppError)
+	FindBy(accountId string) (*Account, *errs.AppError)
 }
 
 func (a Account) CanWithdraw(amount float64) bool {
@@ -27,8 +33,4 @@ func (a Account) CanWithdraw(amount float64) bool {
 	return true
 }
 
-func (a Account) ToNewAccountResponseDto() dto.NewAccountResponse {
-	return dto.NewAccountResponse{
-		AccountId: a.AccountId,
-	}
-}
+

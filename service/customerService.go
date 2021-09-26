@@ -2,8 +2,8 @@ package service
 
 import (
 	"github.com/rastislavsvoboda/banking/domain"
-	"github.com/rastislavsvoboda/banking/domain/dto"
-	"github.com/rastislavsvoboda/banking/domain/errs"
+	"github.com/rastislavsvoboda/banking/dto"
+	"github.com/rastislavsvoboda/banking/errs"
 )
 
 type CustomerService interface {

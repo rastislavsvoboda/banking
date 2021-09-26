@@ -5,7 +5,7 @@ import (
 
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/jmoiron/sqlx"
-	"github.com/rastislavsvoboda/banking/domain/errs"
+	"github.com/rastislavsvoboda/banking/errs"
 	"github.com/rastislavsvoboda/banking/logger"
 )
 

@@ -4,8 +4,8 @@ import (
 	"time"
 
 	"github.com/rastislavsvoboda/banking/domain"
-	"github.com/rastislavsvoboda/banking/domain/dto"
-	"github.com/rastislavsvoboda/banking/domain/errs"
+	"github.com/rastislavsvoboda/banking/dto"
+	"github.com/rastislavsvoboda/banking/errs"
 )
 
 const dbTSLayout = "2006-01-02 15:04:05"
@@ -41,7 +41,7 @@ func (s DefaultAccountService) NewAccount(req dto.NewAccountRequest) (*dto.NewAc
 
 	resp := newAccount.ToNewAccountResponseDto()
 
-	return &resp, nil
+	return resp, nil
 }
 
 func (s DefaultAccountService) MakeTransaction(req dto.TransactionRequest) (*dto.TransactionResponse, *errs.AppError) {

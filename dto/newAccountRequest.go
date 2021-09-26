@@ -3,7 +3,7 @@ package dto
 import (
 	"strings"
 
-	"github.com/rastislavsvoboda/banking/domain/errs"
+	"github.com/rastislavsvoboda/banking/errs"
 )
 
 type NewAccountRequest struct {
@@ -14,12 +14,10 @@ type NewAccountRequest struct {
 
 func (r NewAccountRequest) Validate() *errs.AppError {
 	if r.Amount < 5000 {
-		return errs.NewValidationError("To open a new account you need ti deposit at least 5000.00")
+		return errs.NewValidationError("To open a new account you need to deposit atleast 5000.00")
 	}
-
 	if strings.ToLower(r.AccountType) != "saving" && strings.ToLower(r.AccountType) != "checking" {
-		return errs.NewValidationError("Account type should be saving or checking")
+		return errs.NewValidationError("Account type should be checking or saving")
 	}
-
 	return nil
 }
