@@ -2,7 +2,6 @@ package domain
 
 import (
 	"github.com/rastislavsvoboda/banking/domain/dto"
-	"github.com/rastislavsvoboda/banking/domain/errs"
 )
 
 const WITHDRAWAL = "withdrawal"
