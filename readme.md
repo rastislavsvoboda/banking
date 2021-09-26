@@ -33,3 +33,4 @@ banking.exe
 - https://hub.docker.com/_/mysql/
 - https://github.com/gorilla/mux
 - https://github.com/uber-go/zap
+- https://github.com/jmoiron/sqlx
