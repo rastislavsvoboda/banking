@@ -2,11 +2,14 @@ package domain
 
 import (
 	"database/sql"
+	"fmt"
+	"os"
+	"time"
+
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/jmoiron/sqlx"
 	"github.com/rastislavsvoboda/banking/domain/errs"
 	"github.com/rastislavsvoboda/banking/logger"
-	"time"
 )
 
 type CustomerRepositoryDb struct {
@@ -51,11 +54,18 @@ func (d CustomerRepositoryDb) ById(id string) (*Customer, *errs.AppError) {
 }
 
 func NewCustomerRepositoryDb() CustomerRepositoryDb {
-	client, err := sqlx.Open("mysql", "root:codecamp@tcp(localhost:3306)/banking")
+	dbUser := os.Getenv("DB_USER")
+	dbPassword := os.Getenv("DB_PASSWORD")
+	dbAddress := os.Getenv("DB_ADDRESS")
+	dbPort := os.Getenv("DB_PORT")
+	dbName := os.Getenv("DB_NAME")
+
+	dataSourceName := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s", dbUser, dbPassword, dbAddress, dbPort, dbName)
+	client, err := sqlx.Open("mysql", dataSourceName)
 	if err != nil {
 		panic(err)
 	}
-	
+
 	client.SetConnMaxLifetime(time.Minute * 3)
 	client.SetMaxOpenConns(10)
 	client.SetMaxIdleConns(10)
