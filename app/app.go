@@ -1,12 +1,11 @@
 package app
 
 import (
-	"net/http"
-
 	"github.com/gorilla/mux"
 	"github.com/rastislavsvoboda/banking/domain"
 	"github.com/rastislavsvoboda/banking/logger"
 	"github.com/rastislavsvoboda/banking/service"
+	"net/http"
 )
 
 func Start() {
