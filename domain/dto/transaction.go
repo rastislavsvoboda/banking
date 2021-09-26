@@ -9,22 +9,21 @@ import (
 const WITHDRAWAL = "withdrawal"
 const DEPOSIT = "deposit"
 
-// TODO: rename to TransactionRequest and merge to one file dto/Transaction.go
-type NewTransactionRequest struct {
+type TransactionRequest struct {
 	CustomerId      string  `json:"customer_id"`
 	AccountId       string  `json:"account_id"`
 	Amount          float64 `json:"amount"`
 	TransactionType string  `json:"transaction_type"`
 }
 
-func (r NewTransactionRequest) IsTransactionTypeWithdrawal() bool {
+func (r TransactionRequest) IsTransactionTypeWithdrawal() bool {
 	if r.TransactionType == WITHDRAWAL {
 		return true
 	}
 	return false
 }
 
-func (r NewTransactionRequest) Validate() *errs.AppError {
+func (r TransactionRequest) Validate() *errs.AppError {
 	if strings.ToLower(r.TransactionType) != WITHDRAWAL && strings.ToLower(r.TransactionType) != DEPOSIT {
 		return errs.NewValidationError("Transaction type can only be deposit or withdrawal")
 	}
@@ -34,4 +33,12 @@ func (r NewTransactionRequest) Validate() *errs.AppError {
 	}
 
 	return nil
+}
+
+type TransactionResponse struct {
+	TransactionId   string  `json:"transaction_id"`
+	AccountId       string  `json:"account_id"`
+	Amount          float64 `json:"new_balance"`
+	TransactionType string  `json:"transaction_type"`
+	TransactionDate string  `json:"transaction_date"`
 }

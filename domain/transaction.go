@@ -26,8 +26,8 @@ func (t Transaction) IsWithdrawal() bool {
 	return false
 }
 
-func (t Transaction) ToNewTransactionResponseDto() dto.NewTransactionResponse {
-	return dto.NewTransactionResponse{
+func (t Transaction) ToDto() dto.TransactionResponse {
+	return dto.TransactionResponse{
 		TransactionId:   t.TransactionId,
 		AccountId:       t.AccountId,
 		Amount:          t.Amount,

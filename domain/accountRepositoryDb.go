@@ -33,7 +33,7 @@ func (d AccountRepositoryDb) Save(a Account) (*Account, *errs.AppError) {
 	return &a, nil
 }
 
-func (d AccountRepositoryDb) ById(id string) (*Account, *errs.AppError) {
+func (d AccountRepositoryDb) FindBy(id string) (*Account, *errs.AppError) {
 	var a Account
 
 	accountSql := "select account_id, customer_id, opening_date, account_type, amount, status from accounts where account_id = ?"
@@ -89,7 +89,7 @@ func (d AccountRepositoryDb) SaveTransaction(t Transaction) (*Transaction, *errs
 	t.TransactionId = strconv.FormatInt(transactionId, 10)
 
 	// get the latest account state
-	account, appErr := d.ById(t.AccountId)
+	account, appErr := d.FindBy(t.AccountId)
 	if appErr != nil {
 		return nil, appErr
 	}

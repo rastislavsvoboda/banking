@@ -8,9 +8,11 @@ import (
 	"github.com/rastislavsvoboda/banking/domain/errs"
 )
 
+const dbTSLayout = "2006-01-02 15:04:05"
+
 type AccountService interface {
 	NewAccount(dto.NewAccountRequest) (*dto.NewAccountResponse, *errs.AppError)
-	MakeTransaction(req dto.NewTransactionRequest) (*dto.NewTransactionResponse, *errs.AppError)
+	MakeTransaction(req dto.TransactionRequest) (*dto.TransactionResponse, *errs.AppError)
 }
 
 type DefaultAccountService struct {
@@ -28,7 +30,7 @@ func (s DefaultAccountService) NewAccount(req dto.NewAccountRequest) (*dto.NewAc
 		CustomerId:  req.CustomerId,
 		AccountType: req.AccountType,
 		Amount:      req.Amount,
-		OpeningDate: time.Now().Format("2006-01-02 15:04:05"),
+		OpeningDate: time.Now().Format(dbTSLayout),
 		Status:      "1",
 	}
 
@@ -42,7 +44,7 @@ func (s DefaultAccountService) NewAccount(req dto.NewAccountRequest) (*dto.NewAc
 	return &resp, nil
 }
 
-func (s DefaultAccountService) MakeTransaction(req dto.NewTransactionRequest) (*dto.NewTransactionResponse, *errs.AppError) {
+func (s DefaultAccountService) MakeTransaction(req dto.TransactionRequest) (*dto.TransactionResponse, *errs.AppError) {
 	// incoming request validation
 	err := req.Validate()
 	if err != nil {
@@ -51,8 +53,7 @@ func (s DefaultAccountService) MakeTransaction(req dto.NewTransactionRequest) (*
 
 	// server side validation for checking the available balance in the account
 	if req.IsTransactionTypeWithdrawal() {
-		// TODO: rename to FindBy
-		account, err := s.repo.ById(req.AccountId)
+		account, err := s.repo.FindBy(req.AccountId)
 		if err != nil {
 			return nil, err
 		}
@@ -67,8 +68,7 @@ func (s DefaultAccountService) MakeTransaction(req dto.NewTransactionRequest) (*
 		AccountId:       req.AccountId,
 		Amount:          req.Amount,
 		TransactionType: req.TransactionType,
-		// TODO: extract format dbTSLayout
-		TransactionDate: time.Now().Format("2006-01-02 15:04:05"),
+		TransactionDate: time.Now().Format(dbTSLayout),
 	}
 
 	newTransaction, err := s.repo.SaveTransaction(transaction)
@@ -76,8 +76,7 @@ func (s DefaultAccountService) MakeTransaction(req dto.NewTransactionRequest) (*
 		return nil, err
 	}
 
-	// TODO: rename to ToDto
-	resp := newTransaction.ToNewTransactionResponseDto()
+	resp := newTransaction.ToDto()
 
 	return &resp, nil
 }
