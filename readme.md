@@ -27,3 +27,9 @@ or after build
 ```
 banking.exe
 ```
+
+## resources
+
+- https://hub.docker.com/_/mysql/
+- https://github.com/gorilla/mux
+- https://github.com/uber-go/zap

@@ -1,11 +1,12 @@
 package app
 
 import (
+	"net/http"
+
 	"github.com/gorilla/mux"
 	"github.com/rastislavsvoboda/banking/domain"
+	"github.com/rastislavsvoboda/banking/logger"
 	"github.com/rastislavsvoboda/banking/service"
-	"log"
-	"net/http"
 )
 
 func Start() {
@@ -19,5 +20,8 @@ func Start() {
 	router.HandleFunc("/customers/{customer_id:[0-9]+}", customerHandlers.getCustomer).Methods(http.MethodGet)
 
 	// starting server
-	log.Fatal(http.ListenAndServe("localhost:8000", router))
+	err := http.ListenAndServe("localhost:8000", router)
+	if err != nil {
+		logger.Error(err.Error())
+	}
 }
