@@ -48,6 +48,16 @@ content-type: {{contentType}}
 
 ###
 
+POST http://{{host}}/{{name}}/2000/account/95470
+content-type: {{contentType}}
+
+{
+    "transaction_type": "withdrawal",
+    "amount": 1000
+}
+
+###
+
 
 
 
