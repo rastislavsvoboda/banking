@@ -36,5 +36,18 @@ GET http://{{host}}/{{name}}/2000
 
 POST http://{{host}}/{{name}}
 
+###
+
+POST http://{{host}}/{{name}}/2001/account
+content-type: {{contentType}}
+
+{
+    "account_type": "saving",
+    "amount": 5000.23
+}
+
+###
+
+
 
 

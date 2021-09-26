@@ -40,5 +40,4 @@ func writeResponse(w http.ResponseWriter, code int, data interface{}) {
 	if err := json.NewEncoder(w).Encode(data); err != nil {
 		panic(err)
 	}
-
 }

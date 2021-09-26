@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"time"
 	"os"
 	"strings"
 
@@ -12,6 +13,7 @@ import (
 	"github.com/rastislavsvoboda/banking/domain"
 	"github.com/rastislavsvoboda/banking/logger"
 	"github.com/rastislavsvoboda/banking/service"
+	"github.com/jmoiron/sqlx"
 )
 
 func Start() {
@@ -27,12 +29,22 @@ func Start() {
 		panic(err)
 	}
 
-	// customerHandlers := CustomerHandlers{service.NewCustomerService(domain.NewCustomerRepositoryStub())}
-	customerHandlers := CustomerHandlers{service.NewCustomerService(domain.NewCustomerRepositoryDb())}
+	dbClient, err := createDbClient()
+	if err != nil {
+		panic(err)
+	}
+
+	customerRepository := domain.NewCustomerRepositoryDb(dbClient)
+	// customerRepository := domain.NewCustomerRepositoryStub()
+	customerHandlers := CustomerHandlers{service.NewCustomerService(customerRepository)}
+
+	accountRepository := domain.NewAccountRepositoryDb(dbClient)
+	accountHandlers := AccountHandlers{service.NewAccountService(accountRepository)}
 
 	// define routes
 	router.HandleFunc("/customers", customerHandlers.getAllCustomers).Methods(http.MethodGet)
 	router.HandleFunc("/customers/{customer_id:[0-9]+}", customerHandlers.getCustomer).Methods(http.MethodGet)
+	router.HandleFunc("/customers/{customer_id:[0-9]+}/account", accountHandlers.NewAccount).Methods(http.MethodPost)
 
 	// starting server
 	address := os.Getenv("SERVER_ADDRESS")
@@ -69,4 +81,24 @@ func sanityCheck() error {
 	}
 
 	return nil
+}
+
+func createDbClient() (*sqlx.DB, error) {
+	dbUser := os.Getenv("DB_USER")
+	dbPassword := os.Getenv("DB_PASSWORD")
+	dbAddress := os.Getenv("DB_ADDRESS")
+	dbPort := os.Getenv("DB_PORT")
+	dbName := os.Getenv("DB_NAME")
+
+	dataSourceName := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s", dbUser, dbPassword, dbAddress, dbPort, dbName)
+	client, err := sqlx.Open("mysql", dataSourceName)
+	if err != nil {
+		return nil, err
+	}
+
+	client.SetConnMaxLifetime(time.Minute * 3)
+	client.SetMaxOpenConns(10)
+	client.SetMaxIdleConns(10)
+	
+	return client, nil
 }
